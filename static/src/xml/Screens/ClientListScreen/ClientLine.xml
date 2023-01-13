@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="ClientLine" t-inherit="point_of_sale.ClientLine" t-inherit-mode="extension" owl="1">
+      <xpath expr="//tr" position="replace">
+        <tr t-attf-class="client-line {{highlight}}" t-att-data-id="props.partner.id"
+            t-on-click="trigger('click-client', {client: props.partner})">
+            <td>
+              <t t-esc="props.partner.vat or ''" />
+            </td>
+            <td>
+                <t t-esc="props.partner.name or ''" />
+                <span t-if="highlight">
+                    <br/><button class="edit-client-button" t-on-click.stop="trigger('click-edit')">EDIT</button>
+                </span>
+            </td>
+            <td t-if="!env.isMobile">
+                <t t-esc="props.partner.address" />
+            </td>
+
+            <td class="client-line-last-column-placeholder oe_invisible"></td>
+        </tr>
+      </xpath>
+
+
+    </t>
+
+</templates>
