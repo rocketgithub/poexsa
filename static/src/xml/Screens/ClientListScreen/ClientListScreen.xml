@@ -7,6 +7,16 @@
         </div>
       </xpath>
 
+      <xpath expr="//div[hasclass('clientlist-screen')]//div[hasclass('screen-content')]//div[hasclass('top-content')]//div[hasclass('searchbox-client')]" position="replace">
+        <script type="text/javascript">
+          this.$("input[autofocus]").focus();
+        </script>
+        <div t-if="!state.detailIsShown" class="searchbox-client top-content-center">
+            <input placeholder="Search Customers" size="1" t-on-keyup="updateClientList" autofocus="true"/>
+            <span class="search-clear-client"></span>
+        </div>
+      </xpath>
+
       <xpath expr="//div[hasclass('clientlist-screen')]//div[hasclass('screen-content')]//div[hasclass('top-content')]//div[hasclass('back')][2]" position="before">
         <div t-if="!state.detailIsShown &amp;&amp; !state.selectedClient" class="button new-customer" role="img" aria-label="Add a customer"
                 t-on-click="trigger('activate-edit-mode', { isNewClient: true })"
@@ -16,18 +26,17 @@
         </div>
       </xpath>
 
-      <!-- <xpath expr="//div[hasclass('clientlist-screen')]//div[hasclass('screen-content')]//div[hasclass('top-content')]//section[hasclass('full-content')]//div[hasclass('client-window')]//section[hasclass('list')]//div[hasclass('subwindow-container')]" position="replace"> -->
 
       <xpath expr="//div[hasclass('clientlist-screen')]//div[hasclass('screen-content')]//section[hasclass('full-content')]//div[hasclass('client-window')]//section[hasclass('list')]//div[hasclass('subwindow-container')]//div[hasclass('scrollable-y')]//table[hasclass('client-list')]//thead/tr/th[3]" position="replace">
       </xpath>
       <xpath expr="//div[hasclass('clientlist-screen')]//div[hasclass('screen-content')]//section[hasclass('full-content')]//div[hasclass('client-window')]//section[hasclass('list')]//div[hasclass('subwindow-container')]//div[hasclass('scrollable-y')]//table[hasclass('client-list')]//thead/tr/th[4]" position="replace">
       </xpath>
-      <xpath expr="//div[hasclass('clientlist-screen')]//div[hasclass('screen-content')]//section[hasclass('full-content')]//div[hasclass('client-window')]//section[hasclass('list')]//div[hasclass('subwindow-container')]//div[hasclass('scrollable-y')]//table[hasclass('client-list')]//thead/tr/th[5]" position="replace">
-      </xpath>
+      <!-- <xpath expr="//div[hasclass('clientlist-screen')]//div[hasclass('screen-content')]//section[hasclass('full-content')]//div[hasclass('client-window')]//section[hasclass('list')]//div[hasclass('subwindow-container')]//div[hasclass('scrollable-y')]//table[hasclass('client-list')]//thead/tr/th[5]" position="replace">
+      </xpath> -->
 
-      <xpath expr="//div[hasclass('clientlist-screen')]//div[hasclass('screen-content')]//section[hasclass('full-content')]//div[hasclass('client-window')]//section[hasclass('list')]//div[hasclass('subwindow-container')]//div[hasclass('scrollable-y')]//table[hasclass('client-list')]//thead/tr/th[1]" position="before">
+      <!-- <xpath expr="//div[hasclass('clientlist-screen')]//div[hasclass('screen-content')]//section[hasclass('full-content')]//div[hasclass('client-window')]//section[hasclass('list')]//div[hasclass('subwindow-container')]//div[hasclass('scrollable-y')]//table[hasclass('client-list')]//thead/tr/th[1]" position="before">
           <th>NIT</th>
-      </xpath>
+      </xpath> -->
 
   </t>
 

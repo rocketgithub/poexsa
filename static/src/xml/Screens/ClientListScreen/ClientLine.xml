@@ -2,7 +2,11 @@
 <templates id="template" xml:space="preserve">
 
     <t t-name="ClientLine" t-inherit="point_of_sale.ClientLine" t-inherit-mode="extension" owl="1">
-      <xpath expr="//tr" position="replace">
+      <xpath expr="//tr/td[3]" position="replace">
+      </xpath>
+      <xpath expr="//tr/td[4]" position="replace">
+      </xpath>
+      <!-- <xpath expr="//tr" position="replace">
         <tr t-attf-class="client-line {{highlight}}" t-att-data-id="props.partner.id"
             t-on-click="trigger('click-client', {client: props.partner})">
             <td>
@@ -20,7 +24,7 @@
 
             <td class="client-line-last-column-placeholder oe_invisible"></td>
         </tr>
-      </xpath>
+      </xpath> -->
 
 
     </t>

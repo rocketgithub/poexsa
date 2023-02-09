@@ -14,7 +14,7 @@
     'category': 'Uncategorized',
     'version': '0.1',
 
-    'depends': ['base','point_of_sale','fel_infile'],
+    'depends': ['base','point_of_sale','fel_infile','pos_gt'],
 
     'data': [
 
