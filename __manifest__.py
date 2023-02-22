@@ -17,7 +17,6 @@
     'depends': ['base','point_of_sale','fel_infile','pos_gt'],
 
     'data': [
-
     ],
     'assets':{
         'point_of_sale.assets': [

@@ -15,25 +15,30 @@ from odoo.exceptions import RedirectWarning, UserError, ValidationError
 class Partner(models.Model):
     _inherit = 'res.partner'
 
-    def obtener_cliente_nit_sat(self,data_cliente):
-        partner_id = False
-        headers = { "Content-Type": "application/json" }
-        company_id = self.env['res.company'].search([('id','=',data_cliente[1])])
+    def obtener_cliente_nit_sat(self, data_cliente):
+        query = data_cliente[0]
+        fields = data_cliente[1]
+        company_id = data_cliente[2]
+
+        company_id = self.env['res.company'].search([('id','=',company_id)])
+
         if company_id:
             data = {
                 "emisor_codigo": company_id.usuario_fel,
                 "emisor_clave": company_id.clave_fel,
-                "nit_consulta": data_cliente[0].replace('-',''),
+                "nit_consulta": query.replace('-',''),
             }
+            headers = { "Content-Type": "application/json" }
             r = requests.post('https://consultareceptores.feel.com.gt/rest/action', json=data, headers=headers)
             logging.warning(r.text)
-            if r and r.json():
+            
+            if r and r.json() and r.json()['nombre']:
                 datos_nit = r.json()
+            
                 partner_dic = {
                     'name': datos_nit['nombre'],
-                    'vat': data_cliente[0],
+                    'vat': datos_nit['nit'],
                 }
-                partner_id = self.env['res.partner'].create(partner_dic)
-            else:
-                raise UserError(_("Error en respuestas"))
-        return partner_id
+                partner = self.create(partner_dic)
+                return partner.read(fields)
+        return []
