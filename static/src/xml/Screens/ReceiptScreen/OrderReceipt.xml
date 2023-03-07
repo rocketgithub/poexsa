@@ -12,7 +12,7 @@
                     RESTAURANTE
                 </t>
                 <br/>
-                <span t-esc="env.pos.get_order().uid"/>
+                <span t-esc="env.pos.get_order().uid.split('-')[0]"/>-<span t-esc="env.pos.get_order().uid.split('-')[2]"/>
               </center>
           </div>
       </xpath>
