@@ -1,9 +1,9 @@
 odoo.define('poexsa.models', function (require) {
     'use strict';
 
-    var models = require('point_of_sale.models');
+    var modelsgt = require('pos_gt.pos_gt');
 
-    models.load_models([{
+    modelsgt.models.load_models([{
         model:  'decimal.precision',
         fields: ['name','digits'],
         loaded: function(self,dps){
@@ -14,7 +14,7 @@ odoo.define('poexsa.models', function (require) {
         },
     }]);
 
-    models.load_models([{
+    modelsgt.models.load_models([{
         model: 'res.currency',
         fields: ['name','symbol','position','rounding','rate'],
         ids:    function(self){ return [self.config.currency_id[0], self.company.currency_id[0]]; },
@@ -35,5 +35,13 @@ odoo.define('poexsa.models', function (require) {
 
 
     }]);
+
+    var _super_order = modelsgt.models.Order.prototype;
+    modelsgt.models.Order = modelsgt.models.Order.extend({
+        initialize: function() {
+          _super_order.initialize.apply(this,arguments);
+           this.take_out = true;
+        },
+    })
 
 });
