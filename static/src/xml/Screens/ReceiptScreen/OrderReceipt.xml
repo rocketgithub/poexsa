@@ -3,7 +3,7 @@
 
     <t t-name="OrderReceipt" t-inherit="point_of_sale.OrderReceipt" t-inherit-mode="extension" owl="1">
       <xpath expr="//img[hasclass('pos-receipt-logo')]" position="after">
-          <div>
+          <div style="font-size: 125%;">
               <center>
                 <t t-if="receipt.take_out">
                     PARA LLEVAR
@@ -12,7 +12,9 @@
                     RESTAURANTE
                 </t>
                 <br/>
-                <span t-esc="env.pos.get_order().uid.split('-')[0]"/>-<span t-esc="env.pos.get_order().uid.split('-')[2]"/>
+                <div style="font-size: 125%;">
+                  <span t-esc="env.pos.get_order().uid.split('-')[0]"/>-<span t-esc="env.pos.get_order().uid.split('-')[2]"/>
+                </div>
               </center>
           </div>
       </xpath>
