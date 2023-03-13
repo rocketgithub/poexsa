@@ -40,7 +40,9 @@ odoo.define('poexsa.models', function (require) {
     modelsgt.models.Order = modelsgt.models.Order.extend({
         initialize: function() {
           _super_order.initialize.apply(this,arguments);
-           this.take_out = true;
+          var uid_dividido = this.uid.split('-');
+          this.take_out = true;
+          this.nuevo_numero = parseInt(uid_dividido[1]) + parseInt(uid_dividido[2]);
         },
     })
 
