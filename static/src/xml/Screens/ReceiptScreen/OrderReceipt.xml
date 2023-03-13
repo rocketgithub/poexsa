@@ -13,7 +13,7 @@
                 </t>
                 <br/>
                 <div style="font-size: 125%;">
-                  <span t-esc="env.pos.get_order().uid.split('-')[0]"/>-<span t-esc="env.pos.get_order().uid.split('-')[2]"/>
+                  ORDEN <span t-esc="env.pos.get_order().nuevo_numero"/>
                 </div>
               </center>
           </div>
