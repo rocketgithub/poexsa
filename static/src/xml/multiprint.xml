@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+  <t t-name="OrderChangeReceipt" t-inherit="pos_restaurant.OrderChangeReceipt" t-inherit-mode="extension" owl="1">
+    <xpath expr="//div[hasclass('pos-receipt-order-data')]" position="inside">
+        <div style="font-size: 125%;">
+            <center>
+              <div style="font-size: 125%;">
+                ORDEN <span t-esc="env.pos.get_order().nuevo_numero"/>
+              </div>
+            </center>
+        </div>
+    </xpath>
+  </t>
+
+</templates>
