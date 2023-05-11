@@ -6,7 +6,7 @@
         <div style="font-size: 125%;">
             <center>
               <div style="font-size: 125%;">
-                ORDEN <span t-esc="env.pos.get_order().nuevo_numero"/>
+                ORDEN <span t-esc="nuevo_numero"/>
               </div>
             </center>
         </div>
