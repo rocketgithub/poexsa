@@ -17,6 +17,9 @@
     'depends': ['base','point_of_sale','pos_gt'],
 
     'data': [
+        'views/poexa_views.xml',
+        'wizard/poexsa_reporte_cuadre_ventas_wizard.xml',
+        'security/ir.model.access.csv',
     ],
     'assets':{
         'point_of_sale.assets': [

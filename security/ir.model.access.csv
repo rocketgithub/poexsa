@@ -1,0 +1,4 @@
+"id","name","model_id:id","group_id:id","perm_read","perm_write","perm_create","perm_unlink"
+"poexsa_ingreso_producto","poexsa_usuario_ingreso_producto
+","poexsa.model_poexsa_ingreso_producto","point_of_sale.group_pos_manager",1,1,1,1
+"poexsa_reporte_cuadre_ventas_wizard","poexa_usuario_reporte_cuadre_ventas_wizard","poexsa.model_poexsa_reporte_cuadre_ventas_wizard","point_of_sale.group_pos_manager",1,1,1,1
