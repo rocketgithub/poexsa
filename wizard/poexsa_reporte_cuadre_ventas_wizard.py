@@ -116,11 +116,12 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
                                 gastos.append({'descripcion': linea.payment_ref,'importe': linea.amount * -1})
                                 total_gastos += (linea.amount * -1)
 
-            ingreso_ids = self.env['poexsa.ingreso_producto'].search([('fecha','>=', w.fecha),('fecha','<=', w.fecha),('default_pos_id','=', self.env.user.default_pos_id.id)])
+            ingreso_ids = self.env['poexsa.ingreso_producto'].search([('fecha','>=', w.fecha),('fecha','<=', w.fecha)])
             for ingreso in ingreso_ids:
-                if ingreso.producto_id.id not in ingreso_dic:
-                    ingreso_dic[ingreso.producto_id.id] = 0
-                ingreso_dic[ingreso.producto_id.id] += ingreso.cantidad
+                if ingreso.default_pos_id.id == w.sesion_ids[0].config_id.id:
+                    if ingreso.producto_id.id not in ingreso_dic:
+                        ingreso_dic[ingreso.producto_id.id] = 0
+                    ingreso_dic[ingreso.producto_id.id] += ingreso.cantidad
 
 
 
