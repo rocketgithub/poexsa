@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="poexa_ingreso_producto_view" model="ir.ui.view">
+      <field name="name">poexa.ingreso_producto.form</field>
+      <field name="model">poexsa.ingreso_producto</field>
+      <field name="arch" type="xml">
+          <form>
+              <sheet>
+                  <group>
+                      <field name="fecha"/>
+                      <field name="producto_id"/>
+                      <field name="cantidad"/>
+                      <field name="default_pos_id"/>
+                  </group>
+              </sheet>
+          </form>
+      </field>
+  </record>
+
+  <record id="view_poexa_ingreso_producto_tree" model="ir.ui.view">
+      <field name="name">poexsa.ingreso_producto.tree</field>
+      <field name="model">poexsa.ingreso_producto</field>
+      <field name="arch" type="xml">
+          <tree string="Transactions" sample="1">
+              <field name="producto_id"/>
+              <field name="cantidad"/>
+              <field name="default_pos_id"/>
+          </tree>
+      </field>
+  </record>
+
+
+  <record id="action_poexsa_ingreso_producto_form" model="ir.actions.act_window">
+      <field name="name">Ingreso de producto</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">poexsa.ingreso_producto</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="poexsa.view_poexa_ingreso_producto_tree" />
+      <field name="domain">[]</field>
+      <field name="help" type="html">
+          <p class="o_view_nocontent_empty_folder">
+          </p><p>
+
+          </p>
+      </field>
+  </record>
+
+  <menuitem id="menu_poexsa_ingreso_producto" parent="point_of_sale.menu_point_rep" action="action_poexsa_ingreso_producto_form" sequence="100"/>
+
+</odoo>
