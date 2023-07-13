@@ -2,3 +2,4 @@
 
 from . import res_partner
 from . import poexsa
+from . import product_template

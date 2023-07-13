@@ -25,3 +25,8 @@ class PoexsaIngresoProducto(models.Model):
     fecha = fields.Date('Fecha')
     cantidad = fields.Float('Cantidad')
     default_pos_id = fields.Many2one("pos.config", string="Punto de Venta por Defecto", efault=_default_pos,)
+
+class PoexsaGrupoCuadre(models.Model):
+    _name = 'poexsa.grupo_cuadre'
+
+    name = fields.Char('Nombre')

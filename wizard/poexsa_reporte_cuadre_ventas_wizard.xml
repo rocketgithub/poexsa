@@ -8,7 +8,8 @@
             <group>
                 <field name="fecha"/>
                 <field name="sesion_ids" widget="many2many_tags"/>
-                <field name="categoria_ids" widget="many2many_tags"/>
+                <!-- <field name="categoria_ids" widget="many2many_tags"/> -->
+                <field name="grupo_cuadre_ids" widget="many2many_tags"/>
             </group>
             <group>
                 <field name="name" invisible="1"/>
@@ -17,6 +18,7 @@
             <footer>
                 <button name="print_report_excel" string="Reporte excel" type="object" class="oe_highlight"/>
                 <button special="cancel" string="Cancel" class="oe_link"/>
+                <button name="generar_ajuste_inventario" string="Generar ajuste inventario" type="object" class="oe_highlight"/>
             </footer>
         </form>
         </field>

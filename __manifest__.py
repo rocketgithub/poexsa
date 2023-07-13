@@ -14,10 +14,12 @@
     'category': 'Uncategorized',
     'version': '0.1',
 
-    'depends': ['base','point_of_sale','pos_gt'],
+    'depends': ['base','point_of_sale','pos_gt','product'],
 
     'data': [
         'views/poexa_views.xml',
+        'views/product_template_views.xml',
+        'views/product_views.xml',
         'wizard/poexsa_reporte_cuadre_ventas_wizard.xml',
         'security/ir.model.access.csv',
     ],
