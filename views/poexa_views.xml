@@ -8,10 +8,10 @@
           <form>
               <sheet>
                   <group>
-                      <field name="fecha"/>
-                      <field name="producto_id"/>
+                      <field name="fecha" required="True"/>
+                      <field name="producto_id" required="True"/>
                       <field name="cantidad"/>
-                      <field name="default_pos_id"/>
+                      <field name="default_pos_id" required="True"/>
                   </group>
               </sheet>
           </form>
