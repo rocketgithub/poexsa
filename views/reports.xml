@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <report
+            id="poexsa_account_payment1"
+            string="Voucher poexsa 1"
+            model="account.payment"
+            report_type="qweb-pdf"
+            file="poexsa.reporte_account_payment1"
+            name="poexsa.reporte_account_payment1"
+        />
+
+        <report
+            id="poexsa_account_payment2"
+            string="Voucher poexsa 2"
+            model="account.payment"
+            report_type="qweb-pdf"
+            file="poexsa.reporte_account_payment2"
+            name="poexsa.reporte_account_payment2"
+        />
+
+        <report
+            id="poexsa_account_payment3"
+            string="Voucher poexsa 3"
+            model="account.payment"
+            report_type="qweb-pdf"
+            file="poexsa.reporte_account_payment3"
+            name="poexsa.reporte_account_payment3"
+        />
+
+        <report
+            id="poexsa_account_payment4"
+            string="Voucher poexsa 4"
+            model="account.payment"
+            report_type="qweb-pdf"
+            file="poexsa.reporte_account_payment4"
+            name="poexsa.reporte_account_payment4"
+        />
+
+        <report
+            id="poexsa_account_payment5"
+            string="Voucher poexsa 5"
+            model="account.payment"
+            report_type="qweb-pdf"
+            file="poexsa.reporte_account_payment5"
+            name="poexsa.reporte_account_payment5"
+        />
+
+        <report
+            id="poexsa_account_payment6"
+            string="Voucher poexsa 6"
+            model="account.payment"
+            report_type="qweb-pdf"
+            file="poexsa.reporte_account_payment6"
+            name="poexsa.reporte_account_payment6"
+        />
+
+    </data>
+</odoo>
