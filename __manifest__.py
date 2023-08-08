@@ -21,6 +21,13 @@
         'views/product_template_views.xml',
         'views/product_views.xml',
         'wizard/poexsa_reporte_cuadre_ventas_wizard.xml',
+        'views/reporte_payment1.xml',
+        'views/reporte_payment2.xml',
+        'views/reporte_payment3.xml',
+        'views/reporte_payment4.xml',
+        'views/reporte_payment5.xml',
+        'views/reporte_payment6.xml',
+        'views/reports.xml',
         'security/ir.model.access.csv',
     ],
     'assets':{
