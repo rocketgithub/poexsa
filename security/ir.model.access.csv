@@ -3,3 +3,5 @@
 ","poexsa.model_poexsa_ingreso_producto","point_of_sale.group_pos_manager",1,1,1,1
 "poexsa_reporte_cuadre_ventas_wizard","poexa_usuario_reporte_cuadre_ventas_wizard","poexsa.model_poexsa_reporte_cuadre_ventas_wizard","point_of_sale.group_pos_manager",1,1,1,1
 "poexsa_grupo_cuadre","poexsa_usuario_grupo_cuadre","poexsa.model_poexsa_grupo_cuadre","point_of_sale.group_pos_manager",1,1,1,1
+"poexsa_ingreso_producto_linea","poexsa_usuario_ingreso_producto_linea
+","poexsa.model_poexsa_ingreso_producto_linea","point_of_sale.group_pos_manager",1,1,1,1

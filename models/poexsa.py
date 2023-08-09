@@ -21,12 +21,32 @@ class PoexsaIngresoProducto(models.Model):
             default_pos_id = self.env.user.default_pos_id.id
         return default_pos_id
 
+    def _default_products(self):
+        logging.warning('test')
+        lineas = []
+        producto_ids = self.env['product.template'].search([('grupo_cuadre_id','!=',False)])
+        for producto in producto_ids:
+            linea = {'producto_id': producto.id, 'cantidad': 0}
+            lineas.append((0,0,linea))
+        return lineas
+
     producto_id = fields.Many2one('product.template','Producto')
+    ingreso_producto_linea_ids = fields.One2many('poexsa.ingreso_producto_linea','ingreso_id', 'Ingreso grupo de cuadres', default= _default_products)
     fecha = fields.Date('Fecha')
     cantidad = fields.Float('Cantidad')
-    default_pos_id = fields.Many2one("pos.config", string="Punto de Venta por Defecto", efault=_default_pos,)
+    default_pos_id = fields.Many2one("pos.config", string="Punto de Venta por Defecto", default=_default_pos)
 
 class PoexsaGrupoCuadre(models.Model):
     _name = 'poexsa.grupo_cuadre'
 
     name = fields.Char('Nombre')
+    producto_ids = fields.One2many('product.template','grupo_cuadre_id','Productos')
+
+class PoexsaIngresoProductoLinea(models.Model):
+    _name = 'poexsa.ingreso_producto_linea'
+
+    ingreso_id = fields.Many2one('poexsa.ingreso_producto','Ingreso producto')
+    producto_id = fields.Many2one('product.template','Productos')
+    # grupo_cuadre_id = fields.Many2one('poexsa.grupo_cuadre','Grupo de cuadre')
+    cantidad = fields.Float('Cantidad')
+    sobrante = fields.Float('Sobrante')

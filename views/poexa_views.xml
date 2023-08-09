@@ -9,10 +9,18 @@
               <sheet>
                   <group>
                       <field name="fecha" required="True"/>
-                      <field name="producto_id" required="True"/>
-                      <field name="cantidad"/>
+                      <!-- <field name="producto_id" required="True"/>
+                      <field name="cantidad"/> -->
                       <field name="default_pos_id" required="True"/>
+                      <field name="ingreso_producto_linea_ids" colspan="4" nolabel="1">
+                          <tree string="Ingreso productos" editable="bottom">
+                              <field name="producto_id"/>
+                              <field name="cantidad"/>
+                              <field name="sobrante"/>
+                          </tree>
+                      </field>
                   </group>
+
               </sheet>
           </form>
       </field>
@@ -23,8 +31,9 @@
       <field name="model">poexsa.ingreso_producto</field>
       <field name="arch" type="xml">
           <tree string="Transactions" sample="1">
-              <field name="producto_id"/>
-              <field name="cantidad"/>
+              <!-- <field name="producto_id"/>
+              <field name="cantidad"/> -->
+              <field name="fecha"/>
               <field name="default_pos_id"/>
           </tree>
       </field>
