@@ -6,7 +6,6 @@ import collections
 import re
 
 import requests
-import logging
 from odoo import api, fields, models, tools, SUPERUSER_ID, _, Command
 from odoo.osv.expression import get_unaccent_wrapper
 from odoo.exceptions import RedirectWarning, UserError, ValidationError
@@ -30,11 +29,10 @@ class Partner(models.Model):
             }
             headers = { "Content-Type": "application/json" }
             r = requests.post('https://consultareceptores.feel.com.gt/rest/action', json=data, headers=headers)
-            logging.warning(r.text)
-            
+
             if r and r.json() and r.json()['nombre']:
                 datos_nit = r.json()
-            
+
                 partner_dic = {
                     'name': datos_nit['nombre'],
                     'vat': datos_nit['nit'],
