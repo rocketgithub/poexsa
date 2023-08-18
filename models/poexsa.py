@@ -6,7 +6,6 @@ import collections
 import re
 
 import requests
-import logging
 from odoo import api, fields, models, tools, SUPERUSER_ID, _, Command
 from odoo.osv.expression import get_unaccent_wrapper
 from odoo.exceptions import RedirectWarning, UserError, ValidationError
@@ -22,7 +21,6 @@ class PoexsaIngresoProducto(models.Model):
         return default_pos_id
 
     def _default_products(self):
-        logging.warning('test')
         lineas = []
         producto_ids = self.env['product.template'].search([('grupo_cuadre_id','!=',False)])
         for producto in producto_ids:
@@ -47,6 +45,5 @@ class PoexsaIngresoProductoLinea(models.Model):
 
     ingreso_id = fields.Many2one('poexsa.ingreso_producto','Ingreso producto')
     producto_id = fields.Many2one('product.template','Productos')
-    # grupo_cuadre_id = fields.Many2one('poexsa.grupo_cuadre','Grupo de cuadre')
     cantidad = fields.Float('Cantidad')
     sobrante = fields.Float('Sobrante')

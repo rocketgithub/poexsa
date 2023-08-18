@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
@@ -8,19 +9,22 @@ import xlsxwriter
 import base64
 import io
 import locale
-import logging
 
 class PoexsaReporteCuadreVentasWizard(models.TransientModel):
     _name = 'poexsa.reporte_cuadre_ventas_wizard'
 
+    def _default_grupo_cuadre(self):
+        grupo_cuadre = []
+        grupo_cuadre_ids = self.env['poexsa.grupo_cuadre'].search([])
+        if grupo_cuadre_ids:
+            grupo_cuadre = grupo_cuadre_ids.ids
+        return grupo_cuadre
+
     fecha = fields.Date('Fecha', required=True)
     sesion_ids = fields.Many2many('pos.session',string='Sesiones', required=True)
-    grupo_cuadre_ids = fields.Many2many('poexsa.grupo_cuadre',string='Grupo de cuadre', required=True)
+    grupo_cuadre_ids = fields.Many2many('poexsa.grupo_cuadre',string='Grupo de cuadre', required=True, default=_default_grupo_cuadre)
     name = fields.Char('Nombre archivo', size=32)
     archivo = fields.Binary('Archivo', filters='.xls')
-
-    # def obtener_productos_grupo_cuadre
-
 
     def obtener_productos_grupo_cuadre(self, fecha, sesion_config_id):
         ingreso_ids = self.env['poexsa.ingreso_producto'].search([('fecha','>=', fecha),('fecha','<=', fecha),('default_pos_id','=', sesion_config_id)])
@@ -41,9 +45,11 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
                 if resumen_productos[grupo]['productos']:
                     for producto in resumen_productos[grupo]['productos']:
                         if producto in resumen_productos[grupo]['productos']:
-                            producto = resumen_productos[grupo]['productos'][producto]['product_template']
+                            producto_inventario = resumen_productos[grupo]['productos'][producto]['product'].product_variant_id.id
                             sobrante = resumen_productos[grupo]['productos'][producto]['sobrante']
-                            movimiento_inventario_id = self.env['stock.move'].create({'product_id': producto, '​inventory_quantity': 'sobrante'})
+
+                            ubicacion_id = self.sesion_ids[0].config_id.picking_type_id.default_location_src_id.id
+                            movimiento_inventario_id = self.env['stock.quant'].create({'location_id': ubicacion_id,'product_id': producto_inventario, 'inventory_quantity': sobrante})
         return True
 
     def obtener_resumen_productos(self):
@@ -88,10 +94,6 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
                                     total_gastos += (linea.amount * -1)
 
             ingreso_dic = self.obtener_productos_grupo_cuadre(w.fecha, w.sesion_ids[0].config_id.id)
-            # for ingreso in ingreso_ids:
-            #     if ingreso.producto_id.id not in ingreso_dic:
-            #         ingreso_dic[ingreso.producto_id.id] = 0
-            #     ingreso_dic[ingreso.producto_id.id] += ingreso.cantidad
 
             if linea_venta_ids:
                 ubicacion = w.sesion_ids[0].config_id.picking_type_id.default_location_src_id.id
@@ -116,9 +118,8 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
                 if producto.id not in resumen_productos[producto_grupo_cuadre_id]['productos']:
                     inicial = 0
                     if len(inicial_productos)> 0 and producto.id in inicial_productos:
-                        #inicial = inventario_productos[producto.product_variant_id.id]
                         inicial = inicial_productos[producto.id]
-                    resumen_productos[producto_grupo_cuadre_id]['productos'][producto.id] = {'product_template': producto.id,'product_product': producto.product_variant_id.id,'producto': producto.name,'inicial': inicial, 'ingreso':0, 'total':0, 'ventas': 0,'sobrante':0, 'efectivo_venta':0}
+                    resumen_productos[producto_grupo_cuadre_id]['productos'][producto.id] = {'product_template': producto.id,'product': producto,'product_product': producto.product_variant_id.id,'producto': producto.name,'inicial': inicial, 'ingreso':0, 'total':0, 'ventas': 0,'sobrante':0, 'efectivo_venta':0}
                     resumen_productos[producto_grupo_cuadre_id]['inicial'] +=  inicial
 
                 if producto.id in ventas_dic:
@@ -165,9 +166,6 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
             formato_fecha = libro.add_format({'num_format': 'dd/mm/yy'})
 
             hoja.set_column("B:H", 12)
-            # hoja.set_row(3, 30)
-            # hoja.set_row(6, 30)
-            # hoja.set_row(7, 30)
 
             formato_unir_celdas_encabezado = libro.add_format(
                 {
@@ -246,7 +244,7 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
             total_pagos = resumen_productos_general[3]
 
             fila = 5
-            locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+            locale.setlocale(locale.LC_TIME, self.env.context['lang'] + '.utf8')
             fecha = datetime.strptime(str(w.fecha), "%Y-%m-%d").strftime("%A, %B %d, %Y")
             hoja.merge_range("B3:H3", w.sesion_ids[0].config_id.name,formato_unir_celdas_encabezado)
             hoja.merge_range("D5:E5", "FECHA:")
@@ -284,10 +282,9 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
             hoja.write(fila,6, "TOTAL", formato_gastos_total)
             hoja.write(fila,7, total_efectivo, formato_gastos_total)
             fila += 3
-            # hoja.write(4, 6, 'Fecha')
-            # hoja.write(4, 6, str(w.fecha))
+
             rango_gastos = "B"+str(fila)+":E"+str(fila)
-            hoja.merge_range(rango_gastos, "GASTOS", formato_gastos_encabezado)
+            hoja.merge_range(rango_gastos, "Salida en efectivo", formato_gastos_encabezado)
 
             if len(gastos) > 0:
                 for gasto in gastos:
@@ -330,7 +327,6 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
             sobrante_faltante = total -total_efectivo
             hoja.write(fila, 2, "SOBRANTE/FALTANTE")
             hoja.write(fila, 4, sobrante_faltante)
-            #hoja.merge_range(rango_resumen, "SOBRANTE/FALTANTE", formato_gastos_total)
 
             libro.close()
             datos = base64.b64encode(f.getvalue())
