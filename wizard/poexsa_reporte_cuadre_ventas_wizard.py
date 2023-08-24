@@ -244,7 +244,7 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
             total_pagos = resumen_productos_general[3]
 
             fila = 5
-            locale.setlocale(locale.LC_TIME, self.env.context['lang'] + '.utf8')
+            locale.setlocale(locale.LC_TIME, '')
             fecha = datetime.strptime(str(w.fecha), "%Y-%m-%d").strftime("%A, %B %d, %Y")
             hoja.merge_range("B3:H3", w.sesion_ids[0].config_id.name,formato_unir_celdas_encabezado)
             hoja.merge_range("D5:E5", "FECHA:")
