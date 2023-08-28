@@ -13,7 +13,7 @@
 
         <report
             id="poexsa_account_payment2"
-            string="Voucher poexsa 2"
+            string="BANRURAL Q"
             model="account.payment"
             report_type="qweb-pdf"
             file="poexsa.reporte_account_payment2"
