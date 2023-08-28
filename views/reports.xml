@@ -4,7 +4,7 @@
 
         <report
             id="poexsa_account_payment1"
-            string="Voucher poexsa 1"
+            string="BANTRAB Q"
             model="account.payment"
             report_type="qweb-pdf"
             file="poexsa.reporte_account_payment1"
