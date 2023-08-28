@@ -22,7 +22,7 @@
 
         <report
             id="poexsa_account_payment3"
-            string="Voucher poexsa 3"
+            string="INTERBANCO Q"
             model="account.payment"
             report_type="qweb-pdf"
             file="poexsa.reporte_account_payment3"
