@@ -31,7 +31,7 @@
 
         <report
             id="poexsa_account_payment4"
-            string="Voucher poexsa 4"
+            string="BAC Q"
             model="account.payment"
             report_type="qweb-pdf"
             file="poexsa.reporte_account_payment4"
