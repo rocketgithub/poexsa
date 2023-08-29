@@ -40,7 +40,7 @@
 
         <report
             id="poexsa_account_payment5"
-            string="Voucher poexsa 5"
+            string="BI Q"
             model="account.payment"
             report_type="qweb-pdf"
             file="poexsa.reporte_account_payment5"
