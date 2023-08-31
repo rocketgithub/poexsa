@@ -71,14 +71,15 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
             if pago_ids:
                 for pago in pago_ids:
                     if pago.payment_method_id.id not in total_pagos:
-                        total_pagos[pago.payment_method_id.id] = {'nombre': pago.payment_method_id.name,'total': 0, 'tipo_cambio': 0}
+                        total_pagos[pago.payment_method_id.id] = {'nombre': pago.payment_method_id.name,'total': 0, 'tipo_cambio': 0, 'monto_dolar': 0}
 
                     if pago.payment_method_id.journal_id:
                         if pago.payment_method_id.journal_id.currency_id and pago.payment_method_id.journal_id.currency_id.name == "USD":
                             conversion_dolar = pago.payment_method_id.journal_id.currency_id._get_conversion_rate(pago.payment_method_id.journal_id.currency_id, pago.company_id.currency_id, pago.company_id, pago.pos_order_id.date_order)
-                            monto_quetzal = pago.payment_method_id.journal_id.currency_id._convert(pago.amount,pago.company_id.currency_id,pago.company_id,pago.pos_order_id.date_order)
-                            total_pagos[pago.payment_method_id.id]['total'] += monto_quetzal
+                            monto_dolar= pago.company_id.currency_id._convert(pago.amount,pago.payment_method_id.journal_id.currency_id,pago.company_id,pago.pos_order_id.date_order)
+                            total_pagos[pago.payment_method_id.id]['total'] += pago.amount
                             total_pagos[pago.payment_method_id.id]['tipo_cambio'] = conversion_dolar
+                            total_pagos[pago.payment_method_id.id]['monto_dolar'] += monto_dolar
                         else:
                             total_pagos[pago.payment_method_id.id]['total'] += pago.amount
 
@@ -301,30 +302,35 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
 
             fila += 2
             total_pagos_monto = 0
+            total_depositos_monto = 0
             if len(depositos) > 0:
                 for deposito in depositos:
                     hoja.write(fila, 2, deposito['descripcion'])
                     hoja.write(fila, 4, deposito['importe'])
                     gran_total += deposito['importe']* -1
+                    total_depositos_monto += deposito['importe']
                     fila += 1
+
             if total_pagos:
                 for pago in total_pagos:
                     forma_pago = total_pagos[pago]['nombre']
                     total_pago = total_pagos[pago]['total']
                     hoja.write(fila, 2, forma_pago)
                     if forma_pago == "DOLARES":
+                        hoja.write(fila, 1, total_pagos[pago]['monto_dolar'])
                         hoja.write(fila, 3, total_pagos[pago]['tipo_cambio'])
                     hoja.write(fila, 4, total_pago)
                     total_pagos_monto += total_pago
                     total += total_pago
                     fila += 1
 
-            gran_total += total_pagos_monto - total_gastos
+            gran_total = total_depositos_monto + total_pagos_monto
             rango_resumen = "B"+str(fila)+":D"+str(fila)
             hoja.write(fila, 2, "TOTAL", formato_total)
             hoja.write(fila, 4, gran_total)
             fila += 1
-            sobrante_faltante = total -total_efectivo
+
+            sobrante_faltante = total_gastos + total_efectivo + total_pagos_monto + total_depositos_monto
             hoja.write(fila, 2, "SOBRANTE/FALTANTE")
             hoja.write(fila, 4, sobrante_faltante)
 
