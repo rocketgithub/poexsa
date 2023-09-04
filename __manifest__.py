@@ -20,6 +20,7 @@
         'views/poexa_views.xml',
         'views/product_template_views.xml',
         'views/product_views.xml',
+        'views/pos_config_views.xml',
         'wizard/poexsa_reporte_cuadre_ventas_wizard.xml',
         'views/reporte_payment1.xml',
         'views/reporte_payment2.xml',

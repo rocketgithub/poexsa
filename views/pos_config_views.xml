@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+      <record id="poexsa_pos_config_view_form" model="ir.ui.view">
+          <field name="name">poexsa.pos.config.form.viewt</field>
+          <field name="model">pos.config</field>
+          <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+          <field name="arch" type="xml">
+              <sheet position="inside">
+                  <div class="row mt16 o_settings_container" id="net_pay_access">
+                      <div class="col-12 col-lg-6 o_setting_box">
+                          <div class="o_setting_right_pane">
+                              <label for="monitor" string="Monitor"/>
+                              <field name="monitor"/>
+                          </div>
+                      </div>
+                  </div>
+              </sheet>
+          </field>
+      </record>
+
+</odoo>
