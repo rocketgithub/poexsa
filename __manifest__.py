@@ -29,6 +29,7 @@
         'views/reporte_payment5.xml',
         'views/reporte_payment6.xml',
         'views/reports.xml',
+        'views/report_views.xml',
         'security/ir.model.access.csv',
     ],
     'assets':{
