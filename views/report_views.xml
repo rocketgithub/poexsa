@@ -26,7 +26,7 @@
             <attribute name="style">font-size:20px;</attribute>
         </xpath>
         <xpath expr="//div[@class='page']" position="attributes">
-            <attribute name="style">font-size:52%;</attribute>
+            <attribute name="style">font-size:59%;</attribute>
         </xpath>
     </template>
     
