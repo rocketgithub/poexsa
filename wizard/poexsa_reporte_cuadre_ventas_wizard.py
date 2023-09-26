@@ -88,7 +88,7 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
                     if sesion.cash_register_id.line_ids:
                         for linea in sesion.cash_register_id.line_ids:
                             if linea.amount < 0:
-                                if ("Deposito" or "DEPOSITO" or "Depósito" or "DEPÓSITO") in linea.payment_ref:
+                                if ("Deposito" or "DEPOSITO" or "Depósito" or "DEPÓSITO") in linea.payment_ref.split():
                                     depositos.append({'descripcion': linea.payment_ref,'importe': linea.amount * -1})
                                 else:
                                     gastos.append({'descripcion': linea.payment_ref,'importe': linea.amount * -1})
@@ -209,6 +209,7 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
                     "border": 1,
                     "align": "center",
                     "valign": "vcenter",
+                    'num_format': '[$Q-100A]#,##0.00;[RED]([$Q-100A]#,##0.00)',
                 }
             )
             formato_resumen = libro.add_format(
@@ -244,6 +245,13 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
             depositos = resumen_productos_general[2]
             total_pagos = resumen_productos_general[3]
 
+            formato_moneda_columna = libro.add_format(
+            {"border": 1,"align": "center","valign": "vcenter",'num_format': '[$Q-100A]#,##0.00;[RED]([$Q-100A]#,##0.00)'}
+            )
+            formato_moneda = libro.add_format(
+            {'num_format': '[$Q-100A]#,##0.00;[RED]([$Q-100A]#,##0.00)'}
+            )
+
             fila = 5
             locale.setlocale(locale.LC_TIME, '')
             fecha = datetime.strptime(str(w.fecha), "%Y-%m-%d").strftime("%A, %B %d, %Y")
@@ -256,7 +264,7 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
             hoja.write(5, 4, "TOTAL", formato_columna)
             hoja.write(5, 5, "VENTAS", formato_columna)
             hoja.write(5, 6, "SOBRANTE", formato_columna)
-            hoja.write(5, 7, "EFECTIVO DE VENTA", formato_columna)
+            hoja.write(5, 7, "EFECTIVO DE VENTA", formato_moneda_columna)
 
             total_efectivo = 0
             fila += 1
@@ -275,7 +283,7 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
                 hoja.write(fila, 4, total, formato_resumen)
                 hoja.write(fila, 5, ventas, formato_resumen)
                 hoja.write(fila, 6, sobrante, formato_resumen)
-                hoja.write(fila, 7, efectivo_venta, formato_resumen)
+                hoja.write(fila, 7, efectivo_venta, formato_moneda_columna)
                 total_efectivo += efectivo_venta
                 fila += 1
 
@@ -287,18 +295,20 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
             rango_gastos = "B"+str(fila)+":E"+str(fila)
             hoja.merge_range(rango_gastos, "Salida en efectivo", formato_gastos_encabezado)
 
+            gran_total = 0
             if len(gastos) > 0:
                 for gasto in gastos:
                     rango_gastos_d = "B"+str(fila)+":D"+str(fila)
-                    hoja.write(fila,2, gasto['descripcion'])
-                    hoja.write(fila, 4,gasto['importe'])
+                    hoja.write(fila, 2, gasto['descripcion'])
+                    hoja.write(fila, 4,gasto['importe'], formato_moneda)
                     total_gastos += gasto['importe']
+                    gran_total += gasto['importe']
                     fila +=1
 
 
             rango_total = "B"+str(fila)+":E"+str(fila)
             hoja.write(fila,2, "TOTAL", formato_total)
-            hoja.write(fila,4, total_gastos)
+            hoja.write(fila,4, total_gastos, formato_moneda)
 
             fila += 2
             total_pagos_monto = 0
@@ -306,7 +316,7 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
             if len(depositos) > 0:
                 for deposito in depositos:
                     hoja.write(fila, 2, deposito['descripcion'])
-                    hoja.write(fila, 4, deposito['importe'])
+                    hoja.write(fila, 4, deposito['importe'], formato_moneda)
                     gran_total += deposito['importe']* -1
                     total_depositos_monto += deposito['importe']
                     fila += 1
@@ -319,20 +329,20 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
                     if forma_pago == "DOLARES":
                         hoja.write(fila, 1, total_pagos[pago]['monto_dolar'])
                         hoja.write(fila, 3, total_pagos[pago]['tipo_cambio'])
-                    hoja.write(fila, 4, total_pago)
+                    hoja.write(fila, 4, total_pago, formato_moneda)
                     total_pagos_monto += total_pago
+                    gran_total += total_pago
                     total += total_pago
                     fila += 1
 
-            gran_total = total_depositos_monto + total_pagos_monto
             rango_resumen = "B"+str(fila)+":D"+str(fila)
             hoja.write(fila, 2, "TOTAL", formato_total)
-            hoja.write(fila, 4, gran_total)
+            hoja.write(fila, 4, gran_total,formato_moneda)
             fila += 1
 
-            sobrante_faltante = total_gastos + total_efectivo + total_pagos_monto + total_depositos_monto
+            sobrante_faltante = gran_total - total_efectivo
             hoja.write(fila, 2, "SOBRANTE/FALTANTE")
-            hoja.write(fila, 4, sobrante_faltante)
+            hoja.write(fila, 4, sobrante_faltante, formato_moneda)
 
             libro.close()
             datos = base64.b64encode(f.getvalue())
