@@ -25,8 +25,21 @@
         <xpath expr="//h2[@class='mt16']" position="attributes">
             <attribute name="style">font-size:20px;</attribute>
         </xpath>
+        <xpath expr="//th[@name='th_taxes']" position="replace">
+        </xpath>
+        <xpath expr="//td[@name='td_taxes']" position="replace">
+        </xpath>
+        <xpath expr="//t[@t-call='account.document_tax_totals']" position="replace">
+          <tr class="text-right">
+            <td><strong>Total</strong></td>
+            <td><span t-esc="tax_totals['amount_total']" t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/></td>
+          </tr>
+        </xpath>
         <xpath expr="//div[@class='page']" position="attributes">
-            <attribute name="style">font-size:59%;</attribute>
+            <attribute name="style">font-size:64%;</attribute>
+        </xpath>
+        <xpath expr="//td[@name='td_name']" position="attributes">
+          <attribute name="style">font-size:102%;</attribute>
         </xpath>
     </template>
     
