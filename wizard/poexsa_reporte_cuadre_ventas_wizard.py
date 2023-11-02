@@ -147,7 +147,6 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
                     resumen_productos[producto_grupo_cuadre_id]['productos'][producto.id]['ingreso'] = ingresos[producto.id]
                     resumen_productos[producto_grupo_cuadre_id]['ingreso'] += ingresos[producto.id]
                     ventas = ventas_dic[producto.id]['efectivo_venta'] if producto.id in ventas_dic else 0
-                    # resumen_productos[producto_grupo_cuadre_id]['productos'][producto.id]['sobrante'] = (inicial + ingreso_dic[producto.id] - ventas)
 
                 if producto.id in ingreso_dic:
                     resumen_productos[producto_grupo_cuadre_id]['productos'][producto.id]['sobrante'] = ingreso_dic[producto.id]
