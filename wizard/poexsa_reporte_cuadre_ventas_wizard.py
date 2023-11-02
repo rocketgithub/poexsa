@@ -52,6 +52,20 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
                             movimiento_inventario_id = self.env['stock.quant'].create({'location_id': ubicacion_id,'product_id': producto_inventario, 'inventory_quantity': sobrante})
         return True
 
+    def obtener_ingresos(self,fecha, ubicacion_id):
+        entradas = self.env['stock.picking'].search([('location_dest_id','=',ubicacion_id),('date_done','>=', fecha),('date_done','<=', fecha),('state','=','done')])
+        productos = {}
+        if entradas:
+            for entrada in entradas:
+                for linea in entrada.move_ids_without_package:
+                    if linea.product_id.product_tmpl_id.id not in productos:
+                        productos[linea.product_id.product_tmpl_id.id] = 0
+                    productos[linea.product_id.product_tmpl_id.id] += linea.quantity_done
+        return productos
+
+
+
+
     def obtener_resumen_productos(self):
         for w in self:
             cuadre = []
@@ -95,7 +109,7 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
                                     total_gastos += (linea.amount * -1)
 
             ingreso_dic = self.obtener_productos_grupo_cuadre(w.fecha, w.sesion_ids[0].config_id.id)
-
+            ingresos = self.obtener_ingresos(w.fecha, w.sesion_ids[0].config_id.picking_type_id.default_location_src_id.id)
             if linea_venta_ids:
                 ubicacion = w.sesion_ids[0].config_id.picking_type_id.default_location_src_id.id
                 for producto in self.env['product.product'].with_context({'location': ubicacion, 'to_date': self.fecha.strftime("%Y-%m-%d %H:%M:%S"), 'lang':'es_GT'}).search([('type', '=', 'product'), '|', ('active', '=', True), ('active', '=', False)]):
@@ -129,11 +143,14 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
                     resumen_productos[producto_grupo_cuadre_id]['ventas'] += ventas_dic[producto.id]['cantidad']
                     resumen_productos[producto_grupo_cuadre_id]['efectivo_venta'] += ventas_dic[producto.id]['efectivo_venta']
 
-                if producto.id in ingreso_dic:
-                    resumen_productos[producto_grupo_cuadre_id]['productos'][producto.id]['ingreso'] = ingreso_dic[producto.id]
-                    resumen_productos[producto_grupo_cuadre_id]['ingreso'] += ingreso_dic[producto.id]
+                if producto.id in ingresos:
+                    resumen_productos[producto_grupo_cuadre_id]['productos'][producto.id]['ingreso'] = ingresos[producto.id]
+                    resumen_productos[producto_grupo_cuadre_id]['ingreso'] += ingresos[producto.id]
                     ventas = ventas_dic[producto.id]['efectivo_venta'] if producto.id in ventas_dic else 0
-                    resumen_productos[producto_grupo_cuadre_id]['productos'][producto.id]['sobrante'] = (inicial + ingreso_dic[producto.id] - ventas)
+
+                if producto.id in ingreso_dic:
+                    resumen_productos[producto_grupo_cuadre_id]['productos'][producto.id]['sobrante'] = ingreso_dic[producto.id]
+                    resumen_productos[producto_grupo_cuadre_id]['sobrante'] += ingreso_dic[producto.id]
 
 
         return [resumen_productos,gastos, depositos, total_pagos]
@@ -274,9 +291,9 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
                 inicial = resumen_productos[grupo]['inicial']
                 ingreso = resumen_productos[grupo]['ingreso']
                 total = inicial + ingreso
-                ventas = resumen_productos[grupo]['ventas']
-                sobrante = total - ventas
-                efectivo_venta = resumen_productos[grupo]['efectivo_venta']
+                sobrante = resumen_productos[grupo]['sobrante']
+                ventas = total - sobrante
+                efectivo_venta = venta * resumen_productos[grupo]['efectivo_venta']
                 hoja.write(fila, 1, nombre, formato_resumen)
                 hoja.write(fila, 2, inicial, formato_resumen)
                 hoja.write(fila, 3, ingreso, formato_resumen)
@@ -284,7 +301,7 @@ class PoexsaReporteCuadreVentasWizard(models.TransientModel):
                 hoja.write(fila, 5, ventas, formato_resumen)
                 hoja.write(fila, 6, sobrante, formato_resumen)
                 hoja.write(fila, 7, efectivo_venta, formato_moneda_columna)
-                total_efectivo += efectivo_venta
+                total_efectivo += resumen_productos[grupo]['efectivo_venta']
                 fila += 1
 
             rango = "G"+str(fila)+":G"+str(fila)
