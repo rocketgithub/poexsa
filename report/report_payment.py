@@ -51,3 +51,7 @@ class ReportPayment1(models.AbstractModel):
 class ReportPayment1(models.AbstractModel):
     _name = 'report.poexsa.reporte_account_payment6'
     _inherit = 'poexsa.abstract.reporte_account_payment'
+
+class ReportPayment1(models.AbstractModel):
+    _name = 'report.poexsa.reporte_account_payment7'
+    _inherit = 'poexsa.abstract.reporte_account_payment'

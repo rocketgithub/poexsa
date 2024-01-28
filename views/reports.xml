@@ -56,5 +56,14 @@
             name="poexsa.reporte_account_payment6"
         />
 
+        <report
+            id="poexsa_account_payment7"
+            string="InterBanco Q"
+            model="account.payment"
+            report_type="qweb-pdf"
+            file="poexsa.reporte_account_payment7"
+            name="poexsa.reporte_account_payment7"
+        />
+
     </data>
 </odoo>
