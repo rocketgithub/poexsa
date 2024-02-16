@@ -24,6 +24,25 @@
       </field>
   </record>
 
+  <record id="poexa_franquicia_view" model="ir.ui.view">
+    <field name="name">poexa.franquicia.form</field>
+    <field name="model">poexsa.franquicia</field>
+    <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group>
+                    <field name="name" required="True"/>
+                    <field name="url" required="True"/>
+                    <field name="base_datos" required="True"/>
+                    <field name="usuario" required="True"/>
+                    <field name="contrasenia" required="True"/>
+                </group>
+
+            </sheet>
+        </form>
+    </field>
+  </record>
+
   <record id="view_poexa_ingreso_producto_tree" model="ir.ui.view">
       <field name="name">poexsa.ingreso_producto.tree</field>
       <field name="model">poexsa.ingreso_producto</field>
@@ -31,6 +50,18 @@
           <tree string="Transactions" sample="1">
               <field name="fecha"/>
               <field name="default_pos_id"/>
+          </tree>
+      </field>
+  </record>
+
+  <record id="view_poexa_franquicia_tree" model="ir.ui.view">
+      <field name="name">poexsa.franquicia.tree</field>
+      <field name="model">poexsa.franquicia</field>
+      <field name="arch" type="xml">
+          <tree string="Franquicias" sample="1">
+              <field name="name"/>
+              <field name="url"/>
+              <field name="base_datos"/>
           </tree>
       </field>
   </record>
@@ -50,6 +81,22 @@
       </field>
   </record>
 
+  <record id="action_poexsa_franquicia_form" model="ir.actions.act_window">
+      <field name="name">Franquicias</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">poexsa.franquicia</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="poexsa.view_poexa_franquicia_tree" />
+      <field name="domain">[]</field>
+      <field name="help" type="html">
+          <p class="o_view_nocontent_empty_folder">
+          </p><p>
+
+          </p>
+      </field>
+  </record>
+
   <menuitem id="menu_poexsa_ingreso_producto" parent="point_of_sale.menu_point_rep" action="action_poexsa_ingreso_producto_form" sequence="100"/>
+  <menuitem id="menu_poexsa_franquicia" parent="purchase.menu_purchase_config" action="action_poexsa_franquicia_form" sequence="100"/>
 
 </odoo>

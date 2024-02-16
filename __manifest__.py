@@ -14,13 +14,15 @@
     'category': 'Uncategorized',
     'version': '0.1',
 
-    'depends': ['base','point_of_sale','pos_gt','product'],
+    'depends': ['base','point_of_sale','pos_gt','product','purchase','sale'],
 
     'data': [
         'views/poexa_views.xml',
         'views/product_template_views.xml',
         'views/product_views.xml',
         'views/pos_config_views.xml',
+        'views/purchase_views.xml',
+        'views/sale_views.xml',
         'wizard/poexsa_reporte_cuadre_ventas_wizard.xml',
         'views/reporte_payment1.xml',
         'views/reporte_payment2.xml',
