@@ -36,6 +36,7 @@
                     <field name="base_datos" required="True"/>
                     <field name="usuario" required="True"/>
                     <field name="contrasenia" required="True"/>
+                    <field name="compania" required="True"/>
                 </group>
 
             </sheet>

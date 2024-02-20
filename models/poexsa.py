@@ -56,3 +56,4 @@ class PoexsaFranquicia(models.Model):
     base_datos = fields.Char('Base de datos')
     usuario = fields.Char('Usuario')
     contrasenia = fields.Char('Contraseña')
+    compania = fields.Char('Compañia')
