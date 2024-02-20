@@ -47,3 +47,13 @@ class PoexsaIngresoProductoLinea(models.Model):
     producto_id = fields.Many2one('product.template','Productos')
     cantidad = fields.Float('Cantidad')
     sobrante = fields.Float('Sobrante')
+
+class PoexsaFranquicia(models.Model):
+    _name = 'poexsa.franquicia'
+
+    name = fields.Char("Nombre")
+    url = fields.Char('Url')
+    base_datos = fields.Char('Base de datos')
+    usuario = fields.Char('Usuario')
+    contrasenia = fields.Char('Contraseña')
+    compania = fields.Char('Compañia')

@@ -5,3 +5,5 @@
 "poexsa_grupo_cuadre","poexsa_usuario_grupo_cuadre","poexsa.model_poexsa_grupo_cuadre","point_of_sale.group_pos_manager",1,1,1,1
 "poexsa_ingreso_producto_linea","poexsa_usuario_ingreso_producto_linea
 ","poexsa.model_poexsa_ingreso_producto_linea","point_of_sale.group_pos_manager",1,1,1,1
+"poexsa_franquicia_usuario","poexa_usuario_franquicia","poexsa.model_poexsa_franquicia","purchase.group_purchase_user",1,0,0,0
+"poexsa_franquicia_admin","poexa_admin_franquicia","poexsa.model_poexsa_franquicia","purchase.group_purchase_manager",1,1,1,1
