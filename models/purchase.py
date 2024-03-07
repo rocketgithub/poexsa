@@ -34,7 +34,7 @@ class PurchaseOrder(models.Model):
                 usuario = compra.franquicia_id.usuario
                 contrasenia = compra.franquicia_id.contrasenia
                 empresa = compra.franquicia_id.compania
-                cliente = compra.franquicia_id.compania
+                cliente = compra.company_id.name
 
                 empresa = compra.obtener_empresa(url, base_datos, usuario, contrasenia, empresa)
                 if empresa == False:
@@ -42,15 +42,17 @@ class PurchaseOrder(models.Model):
 
                 cliente = compra.obtener_cliente(url, base_datos, usuario, contrasenia, cliente)
                 if cliente == False:
-                    raise ValidationError(_("Cliente invalida"))
+                    raise ValidationError(_("Cliente invalido"))
 
                 existe_venta = compra.existe_venta(url, base_datos, usuario, contrasenia, empresa)
                 if len(existe_venta) > 0:
                     raise ValidationError(_("Orden de compra actual ya fue registrada con anterioridad en la franquicia destino"))
 
-                venta_id = compra.crear_venta(url, base_datos, usuario, contrasenia, empresa, cliente)
-                if venta_id == False:
+                venta = compra.crear_venta(url, base_datos, usuario, contrasenia, empresa, cliente)
+                if venta == False:
                     raise ValidationError(_("No se pudo crear presupuesto"))
+                else:
+                    self.franquicia_so = venta
 
         return True
 
@@ -71,7 +73,7 @@ class PurchaseOrder(models.Model):
     def existe_venta(self, url, base_datos, usuario, contrasenia, empresa):
         ventas = []
         modelo = xmlrpc.client.ServerProxy('%s/xmlrpc/2/object' % url)
-        lista_ventas = modelo.execute_kw(base_datos, usuario, contrasenia, 'sale.order', 'search', [[['franquicia_po', '=', self.name],['company_id', '=', empresa]]], {'offset': 10, 'limit': 5})
+        lista_ventas = modelo.execute_kw(base_datos, usuario, contrasenia, 'sale.order', 'search', [[['franquicia_po', '=', self.name],['company_id', '=', empresa]]])
 
         if len(lista_ventas):
             ventas = lista_ventas
@@ -94,5 +96,6 @@ class PurchaseOrder(models.Model):
         venta_id = modelo.execute_kw(base_datos, usuario, contrasenia, 'sale.order', 'create', [{'partner_id': cliente, 'franquicia_po': self.name,'order_line': lineas, 'company_id': empresa}])
 
         if venta_id:
-            venta = venta_id
+            venta_lista = modelo.execute_kw(base_datos, usuario, contrasenia, 'sale.order', 'read', [venta_id],  {'fields': ['name']})
+            venta = venta_lista[0]['name']
         return venta
