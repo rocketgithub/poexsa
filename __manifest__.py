@@ -24,6 +24,7 @@
         'views/purchase_views.xml',
         'views/sale_views.xml',
         'wizard/poexsa_reporte_cuadre_ventas_wizard.xml',
+        'wizard/poexsa_reporte_franquicias_wizard.xml',
         'views/reporte_payment1.xml',
         'views/reporte_payment2.xml',
         'views/reporte_payment3.xml',
