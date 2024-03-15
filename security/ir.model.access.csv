@@ -7,3 +7,4 @@
 ","poexsa.model_poexsa_ingreso_producto_linea","point_of_sale.group_pos_manager",1,1,1,1
 "poexsa_franquicia_usuario","poexa_usuario_franquicia","poexsa.model_poexsa_franquicia","purchase.group_purchase_user",1,0,0,0
 "poexsa_franquicia_admin","poexa_admin_franquicia","poexsa.model_poexsa_franquicia","purchase.group_purchase_manager",1,1,1,1
+"poexsa_reporte_franquicias_wizard","poexa_usuario_reporte_franquicias_wizard","poexsa.model_poexsa_reporte_franquicias_wizard","point_of_sale.group_pos_manager",1,1,1,1
