@@ -11,7 +11,7 @@ import io
 import locale
 import logging
 import xmlrpc.client
-
+#CONsidedar campo reporte_ventas_franquicia, solo esos productos mostrar
 class PoexsaReporteFranquiciasWizard(models.TransientModel):
     _name = 'poexsa.reporte_franquicias_wizard'
 
@@ -39,29 +39,40 @@ class PoexsaReporteFranquiciasWizard(models.TransientModel):
 
     def obtener_categorias(self):
         categorias = {}
-        productos = self.env['product.product'].search([('sale_ok','=',True),('purchase_ok','=', True),('categ_id','!=', False)])
+        productos = self.env['product.product'].search([('sale_ok','=',True),('purchase_ok','=', True),('categ_id','!=', False),('reporte_ventas_franquicia','=',True)])
         for producto in productos:
-            categorias[producto.display_name] = producto.categ_id.name
+            categorias[producto.categ_id.name] = producto.categ_id.id
         return categorias
+
 
     #retorna los productos agrupados por categorias
     def obtener_productos_categoria(self, franquicia_ids):
         productos_categorias = {}
         datos_franquicia = {}
         for franquicia in franquicia_ids:
-            datos_franquicia[franquicia.name] = {'nombre': franquicia.name, 'cant_comprada': 0, 'cant_vendida': 0}
+            datos_franquicia[franquicia.name] = {'nombre': franquicia.name, 'cant_comprada': 0, 'cant_vendida': 0, 'franquicia_id': franquicia.id}
 
-        productos = self.env['product.product'].search([('sale_ok','=',True),('categ_id','!=', False)])
+        productos = self.env['product.product'].search([('sale_ok','=',True),('categ_id','!=', False),('reporte_ventas_franquicia','=',True)])
         if productos:
             for producto in productos:
                 if producto.categ_id.name not in productos_categorias:
-                    productos_categorias[producto.categ_id.name] = {'productos': {}, 'categoria': producto.categ_id.name}
+                    productos_categorias[producto.categ_id.name] = {'productos': {}, 'categoria': producto.categ_id.name, 'id': producto.categ_id}
 
                 if producto.display_name not in productos_categorias[producto.categ_id.name]['productos']:
                     productos_categorias[producto.categ_id.name]['productos'][producto.display_name] = datos_franquicia
                 # productos_categorias[producto.categ_id.name]['productos'][producto.display_name] = {'cant_vendida': 0, 'cant_comprada': 0}
 
         return productos_categorias
+
+    def obtener_productos(self):
+        productos_dic = {}
+        productos = self.env['product.product'].search([('sale_ok','=',True),('categ_id','!=', False),('reporte_ventas_franquicia','=',True)])
+        if productos:
+            for producto in productos:
+                if producto.id not in productos_dic:
+                    productos_dic[producto.name] = producto.id
+
+        return productos_dic
 
     def obtener_cantidad_vendida(self, url, base_datos, usuario, contrasenia, fecha_inicio, fecha_fin, empresa):
         ventas = {}
@@ -74,7 +85,7 @@ class PoexsaReporteFranquiciasWizard(models.TransientModel):
                 producto = linea_venta['display_name']
                 cantidad = linea_venta['qty']
                 if producto not in ventas:
-                    ventas[producto] = 0
+                    ventas[producto] = cantidad
                 ventas[producto] += cantidad
         return ventas
 
@@ -101,7 +112,6 @@ class PoexsaReporteFranquiciasWizard(models.TransientModel):
         fecha_fin = wizard.fecha_fin
         productos_categorias = self.obtener_productos_categoria(wizard.franquicia_ids)
         categorias = self.obtener_categorias()
-
         for franquicia in wizard.franquicia_ids:
             nombre = franquicia.name
             url = franquicia.url
@@ -122,6 +132,9 @@ class PoexsaReporteFranquiciasWizard(models.TransientModel):
                                 for prod in productos_categorias[pc]['productos']:
                                     if producto == prod:
                                         productos_categorias[pc]['productos'][prod][nombre]['cant_vendida'] = cantidad
+                                        productos_categorias[pc]['productos'][prod][nombre]['franquicia_id'] = franquicia.id
+                                        productos_categorias[pc]['productos'][prod][nombre]['categoria_id'] = categorias[categoria_producto]
+
 
 
             if len(compras) > 0:
@@ -134,10 +147,47 @@ class PoexsaReporteFranquiciasWizard(models.TransientModel):
                                 for prod in productos_categorias[pc]['productos']:
                                     if producto == prod:
                                         productos_categorias[pc]['productos'][prod][nombre]['cant_vendida'] = cantidad
+                                        productos_categorias[pc]['productos'][prod][nombre]['franquicia_id'] = franquicia.id
+                                        productos_categorias[pc]['productos'][prod][nombre]['categoria_id'] = categorias[categoria_producto]
 
         return productos_categorias
 
+    def abrir_reporte_lista(self):
+        productos = self.obtener_productos()
+        categorias = self.obtener_categorias()
+        franquicias = {}
+        for w in self:
+            for franquicia in w.franquicia_ids:
+                if franquicia.name not in franquicias:
+                    franquicias[franquicia.name] = franquicia.id
 
+            resumen_productos = self.obtener_resumen_productos(w)
+            for categoria in resumen_productos:
+                for producto in resumen_productos[categoria]['productos']:
+                    for franquicia in resumen_productos[categoria]['productos'][producto]:
+                        if (producto in productos) and (categoria in categorias):
+
+                            info = {
+                                'franquicia_id': franquicias[franquicia],
+                                'categoria_id': categorias[categoria],
+                                'producto_id': productos[producto],
+                                'cantidad_venta': resumen_productos[categoria]['productos'][producto][franquicia]['cant_vendida'],
+                                'cantidad_compra': resumen_productos[categoria]['productos'][producto][franquicia]['cant_comprada'],
+
+                            }
+                            self.env['poexsa.reporte_franquicia'].create(info)
+        return {
+            'name': _('test'),
+            'res_model': 'poexsa.reporte_franquicia',
+            # 'view_type': 'tree',
+            'view_mode': 'tree',
+            'view_ids': [self.env.ref('poexsa.view_poexa_reporte_franquicia_tree').id],
+
+            # 'context': "{'type':'out_invoice'}",
+            'type': 'ir.actions.act_window',
+            'target': 'main',
+            'context': "{'create': False}"
+        }
 
     def print_report_excel(self):
         for w in self:
@@ -148,10 +198,10 @@ class PoexsaReporteFranquiciasWizard(models.TransientModel):
             libro = xlsxwriter.Workbook(f)
             hoja = libro.add_worksheet('Reporte ventas compras')
             resumen_productos = self.obtener_resumen_productos(w)
+
             hoja.write(0, 0, w.fecha_inicio)
             hoja.write(0, 1, "al")
             hoja.write(0, 2,w.fecha_fin)
-
             fila = 4
             columna = 0
             for categoria in resumen_productos:

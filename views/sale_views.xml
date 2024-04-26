@@ -8,6 +8,7 @@
             <field name="arch" type="xml">
                 <field name="user_id" position="after">
                     <field name="franquicia_po"/>
+                    <field name="franquicia"/>
                 </field>
             </field>
         </record>

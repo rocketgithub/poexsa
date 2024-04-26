@@ -37,6 +37,7 @@
                     <field name="usuario" required="True"/>
                     <field name="contrasenia" required="True"/>
                     <field name="compania" required="True"/>
+                    <field name="regalia"/>
                 </group>
 
             </sheet>
@@ -88,6 +89,93 @@
       <field name="res_model">poexsa.franquicia</field>
       <field name="view_mode">tree,form</field>
       <field name="view_id" ref="poexsa.view_poexa_franquicia_tree" />
+      <field name="domain">[]</field>
+      <field name="help" type="html">
+          <p class="o_view_nocontent_empty_folder">
+          </p><p>
+
+          </p>
+      </field>
+  </record>
+
+  <record id="poexa_reporte_franquicia_view" model="ir.ui.view">
+    <field name="name">poexa.reporte_franquicia.form</field>
+    <field name="model">poexsa.reporte_franquicia</field>
+    <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group>
+                    <field name="franquicia_id"/>
+                </group>
+
+            </sheet>
+        </form>
+    </field>
+  </record>
+
+  <record id="poexa_reporte_franquicia_facturacion_view" model="ir.ui.view">
+    <field name="name">poexa.reporte_franquicia_facturacion.form</field>
+    <field name="model">poexsa.reporte_franquicia_facturacion</field>
+    <field name="arch" type="xml">
+        <form>
+            <sheet>
+                <group>
+                    <field name="franquicia_id"/>
+                </group>
+
+            </sheet>
+        </form>
+    </field>
+  </record>
+
+  <record id="view_poexa_reporte_franquicia_tree" model="ir.ui.view">
+      <field name="name">poexsa.reporte_franquicia.tree</field>
+      <field name="model">poexsa.reporte_franquicia</field>
+      <field name="arch" type="xml">
+          <tree string="Reporte franquicia" sample="1">
+              <field name="franquicia_id"/>
+              <field name="categoria_id"/>
+              <field name="producto_id"/>
+              <field name="cantidad_venta"/>
+              <field name="cantidad_compra"/>
+          </tree>
+      </field>
+  </record>
+
+  <record id="view_poexa_reporte_franquicia_facturacion_tree" model="ir.ui.view">
+      <field name="name">poexsa.reporte_franquicia_facturacion.tree</field>
+      <field name="model">poexsa.reporte_franquicia_facturacion</field>
+      <field name="arch" type="xml">
+          <tree string="Reporte franquicia" sample="1">
+              <field name="franquicia_id"/>
+              <field name="total_factura_sin_iva"/>
+              <field name="total_factura_con_iva"/>
+              <field name="regalia"/>
+          </tree>
+      </field>
+  </record>
+
+  <record id="action_poexsa_reporte_franquicia" model="ir.actions.act_window">
+      <field name="name">Reporte Franquicias</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">poexsa.reporte_franquicia</field>
+      <field name="view_mode">tree</field>
+      <field name="view_id" ref="poexsa.view_poexa_reporte_franquicia_tree" />
+      <field name="domain">[]</field>
+      <field name="help" type="html">
+          <p class="o_view_nocontent_empty_folder">
+          </p><p>
+
+          </p>
+      </field>
+  </record>
+
+  <record id="action_poexsa_reporte_franquicia_facturacion" model="ir.actions.act_window">
+      <field name="name">Reporte Franquicias Facturacion</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">poexsa.reporte_franquicia_facturacion</field>
+      <field name="view_mode">tree</field>
+      <field name="view_id" ref="poexsa.view_poexa_reporte_franquicia_facturacion_tree" />
       <field name="domain">[]</field>
       <field name="help" type="html">
           <p class="o_view_nocontent_empty_folder">

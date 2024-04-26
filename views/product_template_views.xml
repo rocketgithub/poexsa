@@ -8,6 +8,7 @@
       <field name="arch" type="xml">
           <field name="barcode" position="after">
               <field name="grupo_cuadre_id"/>
+              <field name="reporte_ventas_franquicia"/>
           </field>
       </field>
   </record>
