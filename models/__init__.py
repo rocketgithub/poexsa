@@ -6,3 +6,4 @@ from . import product_template
 from . import pos_config
 from . import purchase
 from . import sale_order
+from . import res_company

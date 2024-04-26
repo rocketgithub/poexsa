@@ -8,3 +8,6 @@
 "poexsa_franquicia_usuario","poexa_usuario_franquicia","poexsa.model_poexsa_franquicia","purchase.group_purchase_user",1,0,0,0
 "poexsa_franquicia_admin","poexa_admin_franquicia","poexsa.model_poexsa_franquicia","purchase.group_purchase_manager",1,1,1,1
 "poexsa_reporte_franquicias_wizard","poexa_usuario_reporte_franquicias_wizard","poexsa.model_poexsa_reporte_franquicias_wizard","point_of_sale.group_pos_manager",1,1,1,1
+"poexsa_reporte_franquicias_fact_wizard","poexa_usuario_reporte_franquicias_fact_wizard","poexsa.model_poexsa_reporte_franquicias_fact_wizard","account.group_account_manager",1,1,1,1
+"poexsa_franquicia_reporte_admin","poexsa_franquicia_reporte_admin","poexsa.model_poexsa_reporte_franquicia","account.group_account_manager",1,1,1,1
+"poexsa_franquicia_reporte_fact_admin","poexsa_franquicia_reporte_fact_admin","poexsa.model_poexsa_reporte_franquicia_facturacion","account.group_account_manager",1,1,1,1

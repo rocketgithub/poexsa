@@ -57,3 +57,21 @@ class PoexsaFranquicia(models.Model):
     usuario = fields.Char('Usuario')
     contrasenia = fields.Char('Contraseña')
     compania = fields.Char('Compañia')
+    regalia = fields.Float('Regalía')
+
+class PoexsaReporteFranquicia(models.TransientModel):
+    _name = 'poexsa.reporte_franquicia'
+
+    franquicia_id = fields.Many2one('poexsa.franquicia','Franquicia')
+    categoria_id = fields.Many2one('product.category','Categoría')
+    producto_id = fields.Many2one('product.product','Producto')
+    cantidad_venta = fields.Float('Cantidad venta')
+    cantidad_compra = fields.Float('Cantidad compra')
+
+class PoexsaReporteFacFranquiciaFacturacion(models.TransientModel):
+    _name = 'poexsa.reporte_franquicia_facturacion'
+
+    franquicia_id = fields.Many2one('poexsa.franquicia','Franquicia')
+    total_factura_sin_iva = fields.Float('Total factura sin IVA')
+    total_factura_con_iva = fields.Float('Total factura con IVA')
+    regalia = fields.Float('Regalía')

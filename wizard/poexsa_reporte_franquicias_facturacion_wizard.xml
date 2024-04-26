@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_poexsa_reporte_franquicias_wizard" model="ir.ui.view">
-        <field name="name">poexsa.reporte_franquicias_wizard_form</field>
-        <field name="model">poexsa.reporte_franquicias_wizard</field>
+    <record id="view_poexsa_reporte_franquicias_fact_wizard" model="ir.ui.view">
+        <field name="name">poexsa.reporte_franquicias_fact_wizard_form</field>
+        <field name="model">poexsa.reporte_franquicias_fact_wizard</field>
         <field name="arch" type="xml">
         <form string="Check products">
             <group>
                 <field name="fecha_inicio"/>
                 <field name="fecha_fin"/>
-                <field name="grupo_cuadre_ids" widget="many2many_tags"/>
                 <field name="franquicia_ids" widget="many2many_tags"/>
             </group>
             <group>
@@ -26,6 +25,6 @@
     </record>
 
 
-    <act_window id="window_reporte_franquicia" name="Reporte franquicia" res_model="poexsa.reporte_franquicias_wizard" binding_model="pos.order" view_mode="form" target="new"/>
-    <menuitem action="window_reporte_franquicia" id="menu_reporte_franquicia" parent="point_of_sale.menu_point_rep" sequence="120"/>
+    <act_window id="window_reporte_franquicia_facturacion" name="Reporte franquicia facturacion" res_model="poexsa.reporte_franquicias_fact_wizard" binding_model="account.move" view_mode="form" target="new"/>
+    <menuitem action="window_reporte_franquicia_facturacion" id="menu_reporte_franquicia_facturacion" parent="account_reports.account_reports_audit_reports_menu" sequence="120"/>
 </odoo>

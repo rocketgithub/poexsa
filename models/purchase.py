@@ -7,7 +7,7 @@ import logging
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
-    franquicia_id = fields.Many2one('poexsa.franquicia','Francquicia')
+    franquicia_id = fields.Many2one('poexsa.franquicia',string='Francquicia',related="company_id.empresa_compra_id", store=True)
     franquicia_so = fields.Char('Franquicia SO')
 
     def obtener_empresa(self, url, base_datos, usuario, contrasenia, nombre):
@@ -53,6 +53,7 @@ class PurchaseOrder(models.Model):
                     raise ValidationError(_("No se pudo crear presupuesto"))
                 else:
                     self.franquicia_so = venta
+                    self.franquicia = compra.company_id.name
 
         return True
 
